@@ -69,9 +69,10 @@ def edgeList( G ):
 def isVC( E, C ):
   """checks if C is a vertex cover for graph E
      C -- set of vertices 
-     E -- graph represented as a list of vertices
+     E -- graph represented as a list of edges
      returns True/False"""
   for (x,y) in E:
+    print(x, y)
     if( (x not in C) and (y not in C) ):
       return False
   return True
