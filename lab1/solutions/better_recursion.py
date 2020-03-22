@@ -82,15 +82,3 @@ def better_recursion(graph, k):
         del G[vertex]
 
     return _better_recursion_helper(G, k, solution)
-
-
-G = loadGraph("graphs/e5")
-V = len(G)
-for v in range(V):
-    s = "{0}:".format(v)
-    for u in G[v]:
-        s += " {0}".format(u)
-    print(s)
-
-print()
-print(better_recursion(G, 4))
