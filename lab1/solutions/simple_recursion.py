@@ -2,7 +2,7 @@ from copy import copy
 from utils.dimacs import edgeList
 
 
-def _simple_rec_helper(G, k, solution):
+def _simple_recursion_helper(G, k, solution):
     # if G is empty, then all needed vertices have been chosen
     if not G:
         return solution
@@ -17,17 +17,23 @@ def _simple_rec_helper(G, k, solution):
     # take first vertex from edge, remove all edges incident with that vertex
     G_without_u = [(a, b) for (a, b) in G
                    if not (a == u or b == u)]
+
     solution_copy = copy(solution)
     solution_copy.add(u)
-    possible_sol_1 = _simple_rec_helper(G_without_u, k - 1, solution_copy)
+
+    possible_sol_1 = _simple_recursion_helper(
+        G_without_u, k - 1, solution_copy)
     if possible_sol_1:
         return possible_sol_1
 
     # take second vertex from edge, remove all edges incident with that vertex
     G_without_v = [(a, b) for (a, b) in G
                    if not (a == v or b == v)]
+
     solution.add(v)
-    possible_sol_2 = _simple_rec_helper(G_without_v, k - 1, solution)
+
+    possible_sol_2 = _simple_recursion_helper(
+        G_without_v, k - 1, solution)
     return possible_sol_2
 
 
@@ -51,4 +57,4 @@ def simple_recursion(graph, k):
             k -= 1
 
     graph = edgeList(graph)  # convert graph to list of edges representation
-    return _simple_rec_helper(graph, k, solution)
+    return _simple_recursion_helper(graph, k, solution)

@@ -1,9 +1,7 @@
 from copy import copy
 
-from utils.dimacs import loadGraph
 
-
-def remove_neighbors(G, neighbors):
+def _remove_neighbors(G, neighbors):
     G_copy = copy(G)
     for v in neighbors:
         try:
@@ -28,13 +26,13 @@ def _better_recursion_helper(G, k, solution):
 
     # take vertex v, remove all his neighbors
     G_without_v = copy(G)
-    G_without_v = remove_neighbors(G_without_v, v_neighbors)
+    G_without_v = _remove_neighbors(G_without_v, v_neighbors)
 
     solution_copy = copy(solution)
     solution_copy.add(v)
 
-    possible_sol_1 = _better_recursion_helper\
-        (G_without_v, k - 1, solution_copy)
+    possible_sol_1 = _better_recursion_helper(
+        G_without_v, k - 1, solution_copy)
     if possible_sol_1:
         return possible_sol_1
 
@@ -47,11 +45,11 @@ def _better_recursion_helper(G, k, solution):
         return None
 
     for neighbor in v_neighbors:
-        G = remove_neighbors(G, neighbor)
+        G = _remove_neighbors(G, neighbor)
 
     solution |= v_neighbors
-    possible_sol_2 = _better_recursion_helper\
-        (G, k - neighbors_count, solution)
+    possible_sol_2 = _better_recursion_helper(
+        G, k - neighbors_count, solution)
     return possible_sol_2
 
 
