@@ -1,10 +1,10 @@
 # APTO Piotr Faliszewski 2018
-# Load graph in the DIMACS ascii format
+# Load graphs in the DIMACS ascii format
 
 
 
 def loadGraph( name ):
-  """Load a graph in the DIMACS ascii format from 
+  """Load a graphs in the DIMACS ascii format from
      the file "name" and return it as a list of sets"""
 
   V = 0
@@ -36,7 +36,7 @@ def loadGraph( name ):
 
 
 def saveGraph( name, G, comment ):
-  """save graph G (list-of-sets) to file "name" in DIMACS ascii format, with comment "comment" """
+  """save graphs G (list-of-sets) to file "name" in DIMACS ascii format, with comment "comment" """
 
   E = edgeList( G )
   f = open( name, "w" )
@@ -54,7 +54,7 @@ def saveGraph( name, G, comment ):
 
 
 def edgeList( G ):
-  """convert list-of-sets graph representation to a list of edges"""
+  """convert list-of-sets graphs representation to a list of edges"""
   V = len(G)
   E = []
   for v in range(V):
@@ -67,12 +67,11 @@ def edgeList( G ):
 
 
 def isVC( E, C ):
-  """checks if C is a vertex cover for graph E
+  """checks if C is a vertex cover for graphs E
      C -- set of vertices 
-     E -- graph represented as a list of edges
+     E -- graphs represented as a list of edges
      returns True/False"""
   for (x,y) in E:
-    print(x, y)
     if( (x not in C) and (y not in C) ):
       return False
   return True

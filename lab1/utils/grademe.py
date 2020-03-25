@@ -1,9 +1,11 @@
 # APTO Piotr Faliszewski 2018
 # Test solution for the VertexCover problem
 
+import os
+import os.path
 
 
-# graph list
+# graphs list
 graphs = [
 ("e5"),
 ("e10"),
@@ -58,20 +60,23 @@ if( len(argv) > 1 ):
   print("  python grademe.py")
   print("")
   print("Looks for graphs in the directory:")
-  print("  graph")
+  print("  graphs")
   print("Solutions should have name:")
   print("  <name>.sol")
   exit()
 
 
-
+graph_dir = os.path.dirname(os.getcwd())
+graph_dir = os.path.join(graph_dir, "graphs")
 def checkGraph( name ):
   s = name + "\t :  "
   size = 99999
   try:
-    G = loadGraph( "graph/" + name )
+    graph_name = os.path.join(graph_dir, name)
+    G = loadGraph(graph_name)
     size = len(G)
-    C = loadSolution( "graph/" + name + ".sol" )
+    print("solution_name:", "." + "graphs/" + name + ".sol")
+    C = loadSolution( "graphs/" + name + ".sol" )
   except IOError:
     s += "--- (%d)" % size
     return (s,size,False)

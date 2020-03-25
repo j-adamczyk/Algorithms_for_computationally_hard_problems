@@ -17,7 +17,7 @@ def loadSolution( name ):
 
 if( len(argv) < 3 ):
   print("Invocation:")
-  print("  python verify.py graph-file solution-file")
+  print("  python verify.py graphs-file solution-file")
   exit()
 
 try:
