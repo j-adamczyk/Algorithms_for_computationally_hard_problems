@@ -37,18 +37,23 @@ def _simple_recursion_helper(G, k, solution):
     return possible_sol_2
 
 
-def simple_recursion(graph, k):
+def simple_recursion(graph, k, solution=None):
     """
     Simple recursive solution of the VC problem. It's based on the observation
     that for every edge e={u,v} at least one vertex (u or v) has to be chosen.
     Time complexity: O(2^k)
-    :param graph: graph represented as a list of sets (incident vertices)
-    :param k: this many vertices have to cover the graph
+    :param graph: graphs represented as a list of sets (incident vertices) or
+    as a dict of sets (vertex -> incident vertices)
+    :param k: this many vertices have to cover the graphs
+    :param solution: if a graph kernel was precomputed for the "graph"
+    parameter, pass the partial solution as this argument
     :return: set of vertices that create the cover if the solution exists,
     otherwise None
     """
-    solution = set()
-    # add all "single" vertices to the solution - they have to be there
+    if not solution:
+        solution = set()
+
+    # add all vertices of degree 0 to the solution - they have to be there
     # and the edge representation used below would not "see" them
     # start iteration from 1 because of "nonexistent" 0-th vertex
     for vertex in range(1, len(graph)):
@@ -56,5 +61,8 @@ def simple_recursion(graph, k):
             solution.add(vertex)
             k -= 1
 
-    graph = edgeList(graph)  # convert graph to list of edges representation
+    if k < 0:
+        return None
+
+    graph = edgeList(graph)  # convert graphs to list of edges representation
     return _simple_recursion_helper(graph, k, solution)

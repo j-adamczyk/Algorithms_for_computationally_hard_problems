@@ -5,10 +5,10 @@ def brute_force(graph, k):
     """
     Brute force solution for the Vertex Cover problem. Checks all possible
     subsets of k vertices and checks if they create a solution (cover all
-    n vertices of the graph).
+    n vertices of the graphs).
     Time complexity: O(n^k)
-    :param graph: graph represented as a list of sets (incident vertices)
-    :param k: this many vertices have to cover the graph
+    :param graph: graphs represented as a list of sets (incident vertices)
+    :param k: this many vertices have to cover the graphs
     :return: set of vertices that create the cover if the solution exists,
     otherwise None
     """
