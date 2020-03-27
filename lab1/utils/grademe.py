@@ -60,14 +60,15 @@ if( len(argv) > 1 ):
   print("  python grademe.py")
   print("")
   print("Looks for graphs in the directory:")
-  print("  graphs")
+  print("  solutions")
   print("Solutions should have name:")
   print("  <name>.sol")
   exit()
 
 
-graph_dir = os.path.dirname(os.getcwd())
-graph_dir = os.path.join(graph_dir, "graphs")
+curr_dir = os.path.dirname(os.getcwd())
+graph_dir = os.path.join(curr_dir, "graphs")
+solution_dir = os.path.join(curr_dir, "solutions")
 def checkGraph( name ):
   s = name + "\t :  "
   size = 99999
@@ -75,8 +76,8 @@ def checkGraph( name ):
     graph_name = os.path.join(graph_dir, name)
     G = loadGraph(graph_name)
     size = len(G)
-    print("solution_name:", "." + "graphs/" + name + ".sol")
-    C = loadSolution( "graphs/" + name + ".sol" )
+    solution_name = os.path.join(solution_dir, name + ".sol")
+    C = loadSolution(solution_name)
   except IOError:
     s += "--- (%d)" % size
     return (s,size,False)

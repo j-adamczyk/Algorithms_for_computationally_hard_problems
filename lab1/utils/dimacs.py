@@ -59,7 +59,7 @@ def edgeList( G ):
   E = []
   for v in range(V):
     for u in G[v]:
-      if( v < u ):
+      if v < u and v != 0 and u != 0:
         E += [(v,u)]
   return E
 
