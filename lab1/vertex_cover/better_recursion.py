@@ -52,8 +52,7 @@ def better_recursion(graph, k, solution=None):
     any given vertex v we have to either add v to the solution, or all of his
     neighbors (otherwise we wouldn't cover v).
     Time complexity: O(1.618^k)
-    :param graph: graphs represented as a list of sets (incident vertices) or
-    as a dict of sets (vertex -> incident vertices)
+    :param graph: graphs represented as a list of sets (incident vertices)
     :param k: this many vertices have to cover the graphs
     :param solution: if a graph kernel was precomputed for the "graph"
     parameter, pass the partial solution as this argument
