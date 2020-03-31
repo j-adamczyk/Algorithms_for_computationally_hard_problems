@@ -86,6 +86,14 @@ def saveSolution( name, C ):
   f.close()
 
 
+def loadSolution( name ):
+  f = open( name, "r" )
+  s = f.readline().strip()
+  C = s.split(',')
+  C = [int(c) for c in C]
+  return C
+
+
 
 def saveCNF( name, cnf ):
   """save formula cnf to the file name in DIMACS ascii format"""

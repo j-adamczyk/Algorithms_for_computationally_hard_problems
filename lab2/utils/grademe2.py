@@ -50,6 +50,9 @@ graphs = [
 ]
 
 
+
+
+
 from dimacs import *
 from sys    import *
 
@@ -76,7 +79,7 @@ if( len(argv) > 1 ):
 
 curr_dir = os.path.dirname(os.getcwd())
 graph_dir = os.path.join(curr_dir, "graphs")
-solution_dir = os.path.join(curr_dir, "approx_solutions")
+solution_dir = os.path.join(curr_dir, "solutions")
 def checkGraph( name ):
   s = name + "\t :  "
   size = 99999
