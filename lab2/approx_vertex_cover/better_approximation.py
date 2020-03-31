@@ -25,7 +25,7 @@ def better_approximation(graph, k):
 
     solution = set()
 
-    while len(solution) < k and G:
+    while len(solution) < k - 1 and G:
         u, v = G.pop()
         G = _remove_neighbors_of_vertices(G, u, v)
         solution.add(u)
