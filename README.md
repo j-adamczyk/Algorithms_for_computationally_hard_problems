@@ -3,4 +3,5 @@ Projects made for Algorithms for Computationally Hard Problems course at AGH Uni
 
 ## Table of Contents
 
-Lab 1: exact algorithms for Vertex Cover problem, graph kernelization
+Lab 1: exact algorithms for Vertex Cover problem  
+Lab 2: approximation algorithms for Vertex Cover problem  
