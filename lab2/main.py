@@ -1,8 +1,5 @@
 from os import getcwd
 from os.path import join
-from vertex_cover.better_recursion import better_recursion
-from vertex_cover.optimized_recursion import optimized_recursion
-from vertex_cover.simple_recursion import simple_recursion
 from utils.dimacs import *
 
 graph_names = [
@@ -37,10 +34,11 @@ graph_names = [
     "r100_005"]
 
 graph_dir = join(getcwd(), "graphs")
-solution_dir = join(getcwd(), "solutions")
+exact_solution_dir = join(getcwd(), "exact_solutions")
+approx_solurion_dir = join(getcwd(), "approx_solutions")
 for name in graph_names:
     graph_filename = join(graph_dir, name)
-    solution_filename = join(solution_dir, name + ".sol")
+    exact_solution_filename = join(exact_solution_dir, name + ".sol")
     G = loadGraph(graph_filename)
     G_edge_list = edgeList(G)
     print(name)
