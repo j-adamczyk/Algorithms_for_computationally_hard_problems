@@ -45,15 +45,6 @@ for name in graph_names:
     G_edge_list = edgeList(G)
     print(name)
     for k in range(1, len(G)):
-        """kernel = kernelize(G, k)
-        if not kernel:
-            continue
-
-        G, k, solution = kernel
-        print("kernel:")
-        print("G", G)
-        print("k", k)
-        print("solution", solution)"""
         solution = optimized_recursion(G, k)
         if not solution:
             continue
