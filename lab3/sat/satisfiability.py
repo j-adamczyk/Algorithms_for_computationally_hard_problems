@@ -44,6 +44,12 @@ def plot(x, y):
 
 
 def calc_sat_probs_and_plot():
+    """
+    Calculate probability of random formula being satisfiable based on it's 
+    size n (number of variables). The result is plotted and shown.
+    Conclusion: probability sharply decreases with number of variables, which
+    makes sense, since this problem is hard.
+    """
     k = 3  # SAT-3CNF
     n = 10  # number of variables: x_1, x_2, ..., x_n
     repeats = 100  # average probability for each one
