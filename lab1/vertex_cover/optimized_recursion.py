@@ -147,8 +147,8 @@ def optimized_recursion(graph, k, solution=None):
        usage of observation 2. will "cut" the cycle, allowing us to use the
        observation 1 for the rest of the vertices.
     Time complexity: O(1.47^k)
-    :param graph: graph represented as an edge list
-    :param k: this many vertices have to cover the graphs
+    :param graph: graphs represented as a list of edges
+    :param k: this many vertices have to cover the graph
     :param solution: if a graph kernel was precomputed for the "graph"
     parameter, pass the partial solution as this argument
     :return: set of vertices that create the cover if the solution exists,
