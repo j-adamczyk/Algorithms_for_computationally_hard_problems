@@ -61,4 +61,3 @@ for name in graph_names:
         print()
         saveSolution(solution_filename, solution)
         break
-    break
