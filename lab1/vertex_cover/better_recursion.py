@@ -52,17 +52,14 @@ def better_recursion(graph, k, solution=None):
     any given vertex v we have to either add v to the solution, or all of his
     neighbors (otherwise we wouldn't cover v).
     Time complexity: O(1.618^k)
-    :param graph: graphs represented as a list of sets (incident vertices)
+    :param graph: graph represented as an edge list
     :param k: this many vertices have to cover the graphs
     :param solution: if a graph kernel was precomputed for the "graph"
     parameter, pass the partial solution as this argument
     :return: set of vertices that create the cover if the solution exists,
     otherwise None
     """
-    # convert graphs to edge list representation
-    G = edgeList(graph)
-
     if not solution:
         solution = set()
 
-    return _better_recursion_helper(G, k, solution)
+    return _better_recursion_helper(graph, k, solution)

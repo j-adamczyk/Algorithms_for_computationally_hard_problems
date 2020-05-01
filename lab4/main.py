@@ -67,7 +67,6 @@ def calculate_weighted_vertex_cover():
     solution_dir = join(getcwd(), "solutions")
     for name in graph_names:
         graph_filename = join(graph_dir, name)
-        solution_filename = join(solution_dir, name + ".sol")
         G = loadGraph(graph_filename)
         G_edge_list = edgeList(G)
 
@@ -99,7 +98,6 @@ def calculate_approx_vertex_cover():
     solution_dir = join(getcwd(), "solutions")
     for name in graph_names:
         graph_filename = join(graph_dir, name)
-        solution_filename = join(solution_dir, name + ".sol")
         G = loadGraph(graph_filename)
         G_edge_list = edgeList(G)
 
@@ -131,6 +129,7 @@ def calculate_approx_vertex_cover():
 
 if __name__ == "__main__":
     #solve_and_print_example()
-    #calculate_vertex_cover()
+    calculate_vertex_cover()
     #calculate_weighted_vertex_cover()
-    calculate_approx_vertex_cover()
+    #calculate_approx_vertex_cover()
+

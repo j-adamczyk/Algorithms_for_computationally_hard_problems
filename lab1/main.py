@@ -1,6 +1,7 @@
 from os import getcwd
 from os.path import join
 from vertex_cover.better_recursion import better_recursion
+from vertex_cover.kernelization import kernelize
 from vertex_cover.optimized_recursion import optimized_recursion
 from vertex_cover.simple_recursion import simple_recursion
 from utils.dimacs import *
@@ -45,7 +46,13 @@ for name in graph_names:
     G_edge_list = edgeList(G)
     print(name)
     for k in range(1, len(G)):
-        solution = optimized_recursion(G, k)
+        kernel = kernelize(G_edge_list, k)
+        if kernel:
+            graph, new_k, solution = kernel
+        else:
+            continue
+
+        solution = optimized_recursion(graph, new_k, solution)
         if not solution:
             continue
 
