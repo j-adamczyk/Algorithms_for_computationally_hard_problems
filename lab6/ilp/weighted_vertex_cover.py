@@ -1,7 +1,13 @@
+from typing import Optional, Set, Tuple, Union
+
 from pulp import *
 
+from ilp.types import VertexSets
 
-def weighted_vertex_cover_solver(graph, neighbors_weight=0):
+
+def weighted_vertex_cover_solver(
+    graph: VertexSets, neighbors_weight: Union[int, float] = 0
+) -> Optional[Tuple[Set[int], int]]:
     """
     Solve weighted vertex cover problem through reduction to an ILP problem
     and using an ILP solver.

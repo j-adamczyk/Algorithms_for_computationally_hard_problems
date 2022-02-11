@@ -18,7 +18,9 @@ def get_random_clause(size: int, max_var: int) -> List[int]:
     return clause
 
 
-def get_random_formula(clause_no: int, clause_size: int, max_var: int) -> List[List[int]]:
+def get_random_formula(
+    clause_no: int, clause_size: int, max_var: int
+) -> List[List[int]]:
     # clause_no = a * n
     # clause_size = 3
     # max_var = n

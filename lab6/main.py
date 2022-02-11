@@ -1,10 +1,11 @@
-from os import getcwd
-from os.path import join
+import os
+from time import time
+
 from ilp.approx_vertex_cover import approx_vertex_cover_solver
 from ilp.example import solve_and_print_example
 from ilp.vertex_cover import vertex_cover_solver
 from ilp.weighted_vertex_cover import weighted_vertex_cover_solver
-from time import time
+
 from utils.dimacs import *
 
 graph_names = [
@@ -41,11 +42,11 @@ graph_names = [
 
 
 def calculate_vertex_cover():
-    graph_dir = join(getcwd(), "graphs")
-    solution_dir = join(getcwd(), "solutions")
+    graph_dir = "graphs"
+    solution_dir = "solutions"
     for name in graph_names:
-        graph_filename = join(graph_dir, name)
-        solution_filename = join(solution_dir, name + ".sol")
+        graph_filename = os.path.join(graph_dir, name)
+        solution_filename = os.path.join(solution_dir, f"{name}.sol")
         G = loadGraph(graph_filename)
         G_edge_list = edgeList(G)
 
@@ -64,10 +65,9 @@ def calculate_vertex_cover():
 
 
 def calculate_weighted_vertex_cover():
-    graph_dir = join(getcwd(), "graphs")
-    solution_dir = join(getcwd(), "solutions")
+    graph_dir = "graphs"
     for name in graph_names:
-        graph_filename = join(graph_dir, name)
+        graph_filename = os.path.join(graph_dir, name)
         G = loadGraph(graph_filename)
         G_edge_list = edgeList(G)
 
@@ -95,10 +95,10 @@ def calculate_weighted_vertex_cover():
 
 
 def calculate_approx_vertex_cover():
-    graph_dir = join(getcwd(), "graphs")
-    solution_dir = join(getcwd(), "solutions")
+    graph_dir = "graphs"
+    solution_dir = "solutions"
     for name in graph_names:
-        graph_filename = join(graph_dir, name)
+        graph_filename = os.path.join(graph_dir, name)
         G = loadGraph(graph_filename)
         G_edge_list = edgeList(G)
 
@@ -118,6 +118,8 @@ def calculate_approx_vertex_cover():
         except Exception:
             print("approximate solution not found")
             k_approx = "-"
+            time_approx = None
+            sol_approx = None
 
         print("exact k:", k_exact)
         print("approximate k:", k_approx)

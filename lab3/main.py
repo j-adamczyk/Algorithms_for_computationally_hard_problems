@@ -1,9 +1,7 @@
 import os
-from typing import List, Set, Tuple
 
-from pysat.solvers import Solver
 from sat.satisfiability import calc_sat_probs_and_plot
-from sat.vertex_cover import solve_vertex_cover
+from sat import solve_vertex_cover, solve_x3c
 from utils.dimacs import *
 
 # commented out the hardest graphs, since they take LONG time to calculate
@@ -50,11 +48,31 @@ graph_names = [
     # "r200_005"
 ]
 
+
+x3c_names = [
+    "10.no.x3c",
+    "10.yes.x3c",
+    "50.no.x3c",
+    "50.yes.x3c",
+    "100.no.x3c",
+    "200.no.x3c",
+    "200.yes.x3c",
+    "350.no.x3c",
+    "350.yes.x3c",
+    "500.no.x3c",
+    "500.yes.x3c",
+    "600.no.x3c",
+    "600.yes.x3c",
+]
+
+
 if __name__ == "__main__":
     # calc_sat_probs_and_plot()
 
+    # Vertex Cover -> SAT
+    """
     graph_dir = "graphs"
-    solution_dir = "solutions"
+    solution_dir = "graphs_solutions"
     for name in graph_names:
         graph_filename = os.path.join(graph_dir, name)
         solution_filename = os.path.join(solution_dir, f"{name}.sol")
@@ -64,11 +82,7 @@ if __name__ == "__main__":
 
         print(name)
         for k in range(1, len(G)):
-            formula = solve_vertex_cover(G, k, return_solution=False)
-            solver = Solver(name="glucose4")
-            solver.append_formula(formula)
-            solver.solve()
-            solution = solver.get_model()
+            solution = solve_vertex_cover(G, k)
             if not solution or not isVC(G_edge_list, solution):
                 continue
 
@@ -77,3 +91,17 @@ if __name__ == "__main__":
             print()
             saveSolution(solution_filename, solution)
             break
+            """
+
+    # X3C -> SAT
+    x3c_dir = "x3c"
+    for name in x3c_names:
+        x3c_filename = os.path.join(x3c_dir, name)
+        n, sets = loadX3C(x3c_filename)
+
+        satisfiable = True if name.split(".")[1] == "yes" else False
+
+        print(name)
+        result = solve_x3c(n, sets)
+        print(f"result: {result}, truth: {satisfiable}")
+        print()

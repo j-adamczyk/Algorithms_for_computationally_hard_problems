@@ -56,7 +56,7 @@ if len(argv) > 1:
     print("  python grademe.py")
     print("")
     print("Looks for graphs in the directory:")
-    print("  solutions")
+    print("  graphs_solutions")
     print("Solutions should have name:")
     print("  <name>.sol")
     exit()
@@ -64,7 +64,7 @@ if len(argv) > 1:
 
 curr_dir = os.path.dirname(os.getcwd())
 graph_dir = os.path.join(curr_dir, "graphs")
-solution_dir = os.path.join(curr_dir, "solutions")
+solution_dir = os.path.join(curr_dir, "graphs_solutions")
 
 
 def checkGraph(name):

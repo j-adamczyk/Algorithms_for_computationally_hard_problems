@@ -37,7 +37,7 @@ def add_implications_for_pairs(formula):
             formula.extend([[-y(i - 1, j), y(i, j)], [-y(i - 1, j - 1), -i, y(i, j)]])
 
 
-def solve_vertex_cover(graph: VertexSets, k: int, return_solution: bool = True) -> Union[Optional[List[int]], List[List[int]]]:
+def solve_vertex_cover(graph: VertexSets, k: int) -> Optional[List[int]]:
     """
     Solve vertex cover problem through reduction to a SAT problem and using a
     SAT solver.
@@ -62,8 +62,6 @@ def solve_vertex_cover(graph: VertexSets, k: int, return_solution: bool = True) 
 
     :param graph: graph as list of sets of neighbors
     :param k: this many vertices have to cover the graph
-    :param return_solution: if True (default), return solution to the vertex
-    cover problem, otherwise return only formula (e. g. for other solver)
     :return: solved vertex cover for given k or None if it's not possible
     """
     global n
@@ -81,15 +79,12 @@ def solve_vertex_cover(graph: VertexSets, k: int, return_solution: bool = True) 
     add_implications_for_pairs(formula)
     formula.append([-y(n, k + 1)])
 
-    if return_solution:
-        result = pycosat.solve(formula)
-        if result == "UNSAT":
-            return None
-        else:
-            x_values = result[:n]  # check only x_i variables
-
-            # if variable was chosen (> 0), translate it back and add to result
-            result = [x_var for x_var in x_values if x_var > 0]
-            return result
+    result = pycosat.solve(formula)
+    if result == "UNSAT":
+        return None
     else:
-        return formula
+        x_values = result[:n]  # check only x_i variables
+
+        # if variable was chosen (> 0), translate it back and add to result
+        result = [x_var for x_var in x_values if x_var > 0]
+        return result

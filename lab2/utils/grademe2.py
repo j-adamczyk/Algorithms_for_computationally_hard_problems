@@ -74,7 +74,7 @@ if len(argv) > 1:
 
 curr_dir = os.path.dirname(os.getcwd())
 graph_dir = os.path.join(curr_dir, "graphs")
-solution_dir = os.path.join(curr_dir, "solutions")
+solution_dir = os.path.join(curr_dir, "graphs_solutions")
 
 
 def checkGraph(name):
