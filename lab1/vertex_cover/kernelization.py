@@ -1,4 +1,9 @@
-def kernelize(graph, k):
+from typing import Optional, Set, Tuple
+
+from vertex_cover.types import EdgeList
+
+
+def kernelize(graph: EdgeList, k: int) -> Optional[Tuple[EdgeList, int, Set[int]]]:
     """
     Calculates the graphs kernel suitable for the Vertex Cover problem.
     It's based on the following observations:
@@ -8,11 +13,12 @@ def kernelize(graph, k):
     3. Every vertex of degree larger than current k has to be in the solution
     4. If the graphs kernel contains more than k^2 edges, it cannot have a
        Vertex Cover of size k
-    Time complexity: O(n)
+
     :param graph: graphs represented as a list of edges
     :param k: this many vertices have to cover the graph
-    :return: graphs kernel (subgraph equal in terms of Vertex Cover solution
-    existence) if the solution may exist or None if it does not exist
+    :return: graph kernel (subgraph equal in terms of Vertex Cover solution
+    existence) in the edge list format if the solution may exist,
+    or None if it does not exist
     """
     solution = set()
 
@@ -69,6 +75,8 @@ def kernelize(graph, k):
     for v, neighbors in G.items():
         for u in neighbors:
             graph.add((u, v)) if u < v else graph.add((v, u))
+
+    graph = list(graph)
 
     # check if solution can exist
     if len(graph) > k * k:

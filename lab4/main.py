@@ -36,7 +36,8 @@ graph_names = [
     "r50_001",
     "r50_01",
     "r50_05",
-    "r100_005"]
+    "r100_005",
+]
 
 
 def calculate_vertex_cover():
@@ -128,8 +129,7 @@ def calculate_approx_vertex_cover():
 
 
 if __name__ == "__main__":
-    #solve_and_print_example()
+    # solve_and_print_example()
     calculate_vertex_cover()
-    #calculate_weighted_vertex_cover()
-    #calculate_approx_vertex_cover()
-
+    # calculate_weighted_vertex_cover()
+    # calculate_approx_vertex_cover()

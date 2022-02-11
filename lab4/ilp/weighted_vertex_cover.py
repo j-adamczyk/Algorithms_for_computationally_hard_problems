@@ -33,9 +33,11 @@ def weighted_vertex_cover_solver(graph, neighbors_weight=0):
     weight = lambda neighbors_count: neighbors_count ** neighbors_weight
 
     # objective
-    variables = {v: LpVariable(str(v), cat="Binary") * weight(len(neighbors))
-                 for v, neighbors in enumerate(graph)
-                 if neighbors}  # ignore degree 0 vertices
+    variables = {
+        v: LpVariable(str(v), cat="Binary") * weight(len(neighbors))
+        for v, neighbors in enumerate(graph)
+        if neighbors
+    }  # ignore degree 0 vertices
 
     model += sum(variables.values())
 

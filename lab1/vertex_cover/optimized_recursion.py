@@ -1,8 +1,10 @@
 from copy import copy, deepcopy
-from utils.dimacs import edgeList
+from typing import Dict, List, Optional, Set, Tuple
+
+from vertex_cover.types import EdgeList
 
 
-def _check_solution(G, k):
+def _check_solution(G: EdgeList, k: int) -> str:
     # safety measure for cases when we remove too many neighbors
     if k < 0:
         return "None"
@@ -20,7 +22,7 @@ def _check_solution(G, k):
     return "continue"
 
 
-def _get_neighbor_of_vertex(G, u):
+def _get_neighbor_of_vertex(G: EdgeList, u: int) -> int:
     for edge in G:
         # return the neighbor after finding the edge with u
         if edge[0] == u:
@@ -29,7 +31,7 @@ def _get_neighbor_of_vertex(G, u):
             return edge[0]
 
 
-def _get_neighbors_of_vertex(G, u):
+def _get_neighbors_of_vertex(G: Set[Tuple[int, int]], u: int) -> Set[int]:
     neighbors = set()
     for edge in G:
         if edge[0] == u:
@@ -39,12 +41,12 @@ def _get_neighbors_of_vertex(G, u):
     return neighbors
 
 
-def _remove_neighbors_of_vertex(G, u):
+def _remove_neighbors_of_vertex(G: EdgeList, u: int) -> EdgeList:
     G = [edge for edge in G if edge[0] != u and edge[1] != u]
     return G
 
 
-def _get_vertices_degrees(G):
+def _get_vertices_degrees(G: List[Tuple[int, int]]) -> Dict[int, int]:
     degrees = dict()
     for edge in G:
         u, v = edge
@@ -53,7 +55,9 @@ def _get_vertices_degrees(G):
     return degrees
 
 
-def _remove_degree_1_vertices(G, k, solution, degrees):
+def _remove_degree_1_vertices(
+    G: EdgeList, k: int, solution: Set[int], degrees: Dict[int, int]
+) -> Tuple[EdgeList, int]:
     # while graph contains at least one vertex with degree 1, remove them (add
     # their only neighbor to the solution, remove his edges)
     # it may create new vertices, hence the loop
@@ -74,7 +78,7 @@ def _remove_degree_1_vertices(G, k, solution, degrees):
     return G, k
 
 
-def _get_highest_degree_vertex(degrees):
+def _get_highest_degree_vertex(degrees: Dict[int, int]) -> int:
     max_degree = -1
     best_vertex = -1
     for u, degree in degrees.items():
@@ -84,7 +88,9 @@ def _get_highest_degree_vertex(degrees):
     return best_vertex
 
 
-def _optimized_recursion_helper(G, k, solution):
+def _optimized_recursion_helper(
+    G: EdgeList, k: int, solution: Set[int]
+) -> Optional[Set[int]]:
     # check is we can finish with this solution
     check = _check_solution(G, k)
     if check == "None":
@@ -120,18 +126,18 @@ def _optimized_recursion_helper(G, k, solution):
     # take neighbors of u, remove all of their neighbors
     G = set(G)
     neighbors = _get_neighbors_of_vertex(G, u)
-    neighbors_edges = {edge for edge in G
-                       if edge[0] in neighbors or edge[1] in neighbors}
+    neighbors_edges = {
+        edge for edge in G if edge[0] in neighbors or edge[1] in neighbors
+    }
     G -= neighbors_edges
     G = list(G)
 
     solution |= neighbors
-    possible_sol_2 = _optimized_recursion_helper \
-        (G, k - len(neighbors), solution)
+    possible_sol_2 = _optimized_recursion_helper(G, k - len(neighbors), solution)
     return possible_sol_2
 
 
-def optimized_recursion(graph, k, solution=None):
+def optimized_recursion(graph: EdgeList, k: int, solution: Optional[Set[int]] = None):
     """
     Even more upgraded version of recursive solution. It's very similar to the
     upgraded version (better_recursion), but makes use of the following
@@ -147,6 +153,7 @@ def optimized_recursion(graph, k, solution=None):
        usage of observation 2. will "cut" the cycle, allowing us to use the
        observation 1 for the rest of the vertices.
     Time complexity: O(1.47^k)
+
     :param graph: graphs represented as a list of edges
     :param k: this many vertices have to cover the graph
     :param solution: if a graph kernel was precomputed for the "graph"

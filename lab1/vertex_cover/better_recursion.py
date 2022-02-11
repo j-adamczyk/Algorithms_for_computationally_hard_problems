@@ -1,8 +1,12 @@
 from copy import copy
-from utils.dimacs import edgeList
+from typing import Optional, Set
+
+from vertex_cover.types import EdgeList
 
 
-def _better_recursion_helper(G, k, solution):
+def _better_recursion_helper(
+    G: EdgeList, k: int, solution: Set[int]
+) -> Optional[Set[int]]:
     # safety measure for cases when we remove too many neighbors
     if k < 0:
         return None
@@ -31,13 +35,11 @@ def _better_recursion_helper(G, k, solution):
 
     # take neighbors of u, remove all of their neighbors
     G = set(G)
-    neighbors = {edge[1] if edge[0] == u
-                 else edge[0]
-                 for edge in G
-                 if edge[1] == u}
+    neighbors = {edge[1] if edge[0] == u else edge[0] for edge in G if edge[1] == u}
     neighbors.add(v)
-    neighbors_edges = {edge for edge in G
-                       if edge[0] in neighbors or edge[1] in neighbors}
+    neighbors_edges = {
+        edge for edge in G if edge[0] in neighbors or edge[1] in neighbors
+    }
     G -= neighbors_edges
     G = list(G)
 
@@ -46,12 +48,13 @@ def _better_recursion_helper(G, k, solution):
     return possible_sol_2
 
 
-def better_recursion(graph, k, solution=None):
+def better_recursion(graph: EdgeList, k: int, solution: Optional[Set[int]] = None):
     """
     Upgraded version of recursive solution based on an observation that for
     any given vertex v we have to either add v to the solution, or all of his
     neighbors (otherwise we wouldn't cover v).
     Time complexity: O(1.618^k)
+
     :param graph: graphs represented as a list of edges
     :param k: this many vertices have to cover the graph
     :param solution: if a graph kernel was precomputed for the "graph"
@@ -59,7 +62,7 @@ def better_recursion(graph, k, solution=None):
     :return: set of vertices that create the cover if the solution exists,
     otherwise None
     """
-    if not solution:
+    if solution is None:
         solution = set()
 
     return _better_recursion_helper(graph, k, solution)

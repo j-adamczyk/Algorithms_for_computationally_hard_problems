@@ -23,9 +23,11 @@ def approx_vertex_cover_solver(graph):
     model = LpProblem("vertex_cover", LpMinimize)
 
     # objective
-    variables = {v: LpVariable(str(v), lowBound=0, upBound=1, cat="Continuous")
-                 for v, neighbors in enumerate(graph)
-                 if neighbors}  # ignore degree 0 vertices
+    variables = {
+        v: LpVariable(str(v), lowBound=0, upBound=1, cat="Continuous")
+        for v, neighbors in enumerate(graph)
+        if neighbors
+    }  # ignore degree 0 vertices
 
     model += sum(variables.values())
 

@@ -50,5 +50,3 @@ def solve_and_print_example():
     for var in model.variables():
         print(var.name, "=", var.varValue)
     print("\n")
-
-

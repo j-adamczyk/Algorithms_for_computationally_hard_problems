@@ -1,5 +1,6 @@
-from os import getcwd
-from os.path import join
+import os
+from typing import List, Set, Tuple
+
 from pysat.solvers import Solver
 from sat.satisfiability import calc_sat_probs_and_plot
 from sat.vertex_cover import solve_vertex_cover
@@ -52,14 +53,16 @@ graph_names = [
 if __name__ == "__main__":
     # calc_sat_probs_and_plot()
 
-    graph_dir = join(getcwd(), "graphs")
-    solution_dir = join(getcwd(), "solutions")
+    graph_dir = "graphs"
+    solution_dir = "solutions"
     for name in graph_names:
-        print("Graph:", name)
-        graph_filename = join(graph_dir, name)
-        solution_filename = join(solution_dir, name + ".sol")
-        G = loadGraph(graph_filename)
-        G_edge_list = edgeList(G)
+        graph_filename = os.path.join(graph_dir, name)
+        solution_filename = os.path.join(solution_dir, f"{name}.sol")
+
+        G: List[Set[int]] = loadGraph(graph_filename)
+        G_edge_list: List[Tuple[int, int]] = edgeList(G)
+
+        print(name)
         for k in range(1, len(G)):
             formula = solve_vertex_cover(G, k, return_solution=False)
             solver = Solver(name="glucose4")
@@ -71,5 +74,6 @@ if __name__ == "__main__":
 
             print("solution k:", k)
             print("VC:", isVC(G_edge_list, solution), "\n")
+            print()
             saveSolution(solution_filename, solution)
             break

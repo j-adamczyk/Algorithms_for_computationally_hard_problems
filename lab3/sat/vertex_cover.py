@@ -1,4 +1,8 @@
+from typing import List, Optional, Union
+
 import pycosat
+
+from approx_vertex_cover.types import VertexSets
 from utils.dimacs import edgeList
 
 
@@ -30,13 +34,10 @@ def set_y_0_j_false(formula):
 def add_implications_for_pairs(formula):
     for i in range(1, n + 1):
         for j in range(1, n + 1):
-            formula.extend([
-                [-y(i - 1, j), y(i, j)],
-                [-y(i - 1, j - 1), -i, y(i, j)]
-            ])
+            formula.extend([[-y(i - 1, j), y(i, j)], [-y(i - 1, j - 1), -i, y(i, j)]])
 
 
-def solve_vertex_cover(graph, k, return_solution=True):
+def solve_vertex_cover(graph: VertexSets, k: int, return_solution: bool = True) -> Union[Optional[List[int]], List[List[int]]]:
     """
     Solve vertex cover problem through reduction to a SAT problem and using a
     SAT solver.

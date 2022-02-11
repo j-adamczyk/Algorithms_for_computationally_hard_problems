@@ -1,9 +1,7 @@
-from os import getcwd
-from os.path import join
-from vertex_cover.better_recursion import better_recursion
-from vertex_cover.kernelization import kernelize
-from vertex_cover.optimized_recursion import optimized_recursion
-from vertex_cover.simple_recursion import simple_recursion
+import os
+
+from vertex_cover import *
+from vertex_cover.types import EdgeList, VertexSets
 from utils.dimacs import *
 
 graph_names = [
@@ -38,27 +36,31 @@ graph_names = [
     "r100_005",
 ]
 
-graph_dir = join(getcwd(), "graphs")
-solution_dir = join(getcwd(), "solutions")
-for name in graph_names:
-    graph_filename = join(graph_dir, name)
-    solution_filename = join(solution_dir, name + ".sol")
-    G = loadGraph(graph_filename)
-    G_edge_list = edgeList(G)
-    print(name)
-    for k in range(1, len(G)):
-        kernel = kernelize(G_edge_list, k)
-        if kernel:
-            graph, new_k, solution = kernel
-        else:
-            continue
 
-        solution = optimized_recursion(graph, new_k, solution)
-        if not solution:
-            continue
+if __name__ == "__main__":
+    graph_dir = "graphs"
+    solution_dir = "solutions"
+    for name in graph_names:
+        graph_filename = os.path.join(graph_dir, name)
+        solution_filename = os.path.join(solution_dir, f"{name}.sol")
 
-        print("solution k:", k)
-        print("VC:", isVC(G_edge_list, solution))
-        print()
-        saveSolution(solution_filename, solution)
-        break
+        G: VertexSets = loadGraph(graph_filename)
+        G_edge_list: EdgeList = edgeList(G)
+
+        print(name)
+        for k in range(1, len(G)):
+            kernel = kernelize(G_edge_list, k)
+            if kernel:
+                graph, k, solution = kernel
+            else:
+                continue
+
+            solution = better_recursion(graph, k, solution)
+            if not solution:
+                continue
+
+            print("solution k:", k)
+            print("VC:", isVC(G_edge_list, solution))
+            print()
+            saveSolution(solution_filename, solution)
+            break

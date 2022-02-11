@@ -1,7 +1,7 @@
-from os import getcwd
-from os.path import join
-from approx_vertex_cover.better_approximation import better_approximation
-from approx_vertex_cover.simple_approximation import simple_approximation
+import os
+
+from approx_vertex_cover import better_approximation, simple_approximation
+from approx_vertex_cover.types import EdgeList, VertexSets
 from utils.dimacs import *
 
 graph_names = [
@@ -44,23 +44,27 @@ graph_names = [
     "r100_005",
     "r100_01",
     "r200_001",
-    "r200_005"]
+    "r200_005",
+]
 
-graph_dir = join(getcwd(), "graphs")
-solution_dir = join(getcwd(), "solutions")
-for name in graph_names:
-    graph_filename = join(graph_dir, name)
-    solution_filename = join(solution_dir, name + ".sol")
-    G = loadGraph(graph_filename)
-    G_edge_list = edgeList(G)
-    print(name)
-    for k in range(1, len(G)):
-        solution = better_approximation(G, k)
-        if not solution or not isVC(G_edge_list, solution):
-            continue
+if __name__ == "__main__":
+    graph_dir = "graphs"
+    solution_dir = "solutions"
+    for name in graph_names:
+        graph_filename = os.path.join(graph_dir, name)
+        solution_filename = os.path.join(solution_dir, f"{name}.sol")
 
-        print("solution k:", k)
-        print("VC:", isVC(G_edge_list, solution))
-        print()
-        saveSolution(solution_filename, solution)
-        break
+        G: VertexSets = loadGraph(graph_filename)
+        G_edge_list: EdgeList = edgeList(G)
+
+        print(name)
+        for k in range(1, len(G)):
+            solution = better_approximation(G_edge_list, k)
+            if not solution or not isVC(G_edge_list, solution):
+                continue
+
+            print("solution k:", k)
+            print("VC:", isVC(G_edge_list, solution))
+            print()
+            saveSolution(solution_filename, solution)
+            break
