@@ -35,7 +35,8 @@ graph_names = [
     "r50_001",
     "r50_01",
     "r50_05",
-    "r100_005"]
+    "r100_005",
+]
 
 graph_dir = join(getcwd(), "graphs")
 solution_dir = join(getcwd(), "solutions")
