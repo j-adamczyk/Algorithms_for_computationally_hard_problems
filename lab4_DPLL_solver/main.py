@@ -4,6 +4,8 @@ from dpll import basic_dpll_solve
 from utils.dimacs import loadCNF
 
 sat_formula_names = [
+    "5.no.sat",
+    "5.yes.sat",
     "10.no.sat",
     "10.yes.sat",
     "100.no.sat",
@@ -16,8 +18,6 @@ sat_formula_names = [
     "35.yes.sat",
     "40.no.sat",
     "40.yes.sat",
-    "5.no.sat",
-    "5.yes.sat",
     "50.no.sat",
     "50.yes.sat",
     "60.no.sat",
@@ -53,7 +53,20 @@ if __name__ == "__main__":
         sat_formula_filename = os.path.join(sat_formulas_dir, name)
         n, formula = loadCNF(sat_formula_filename)
 
+        if name != "5.yes.sat":
+            continue
+
+        satisfiable = name.split(".")[1]
+        if satisfiable == "no":
+            satisfiable = False
+        elif satisfiable == "yes":
+            satisfiable = True
+        else:
+            satisfiable = "unknown"
+
         print(name)
-        result = basic_dpll_solve(formula)
-        print(f"result: {result}, truth: {satisfiable}")
+        result, num_recurrent_calls = basic_dpll_solve(formula)
+        print(f"Result: {result}, truth: {satisfiable}")
+        print(f"Number of recurrent calls:", num_recurrent_calls)
         print()
+        exit()
