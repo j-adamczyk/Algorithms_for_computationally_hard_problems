@@ -1,5 +1,5 @@
+import operator
 from typing import Dict, List, Optional, Tuple, Union
-
 
 _recurrence_counter = 0
 
@@ -66,6 +66,59 @@ def _simplify_formula(
     return simplified_formula
 
 
+def _unit_propagation_with_fixed_sign(
+    formula: List[List[int]], values: Dict[int, int]
+) -> Optional[List[List[int]]]:
+    """
+    Simplifies a SAT formula with unit propagation and fixed sign variable evaluation.
+
+    If there is a clause with a single variable, it has to be True. Setting
+    this may change the rest of formula, so we continue as long as there are
+    any changes. In this process we may reduce the formula to the empty one
+    (satisfied) or detect unsatisfiability.
+
+    If there is a variable that has a fixed sign (non-negated / negated) in the
+    entire formula, we can set a value to it.
+
+    For formulas we assume that:
+    - None formula is not satisfied
+    - [] formula is satisfied (since it's an empty conjunction, similar to
+      product of ones being one)
+
+    :param formula: list of clauses in CNF form
+    :param values: values of variables
+    :return: simplified formula
+    """
+    change = True
+    while change:
+        change = False
+
+        # unit propagation
+        for clause in formula:
+            if len(clause) == 1 and clause[0] not in values:
+                variable = clause[0]
+                values[variable] = 1
+                values[-variable] = -1
+                change = True
+
+        # fixed value variable evaluation
+        all_variables = set()
+        for clause in formula:
+            all_variables |= set(clause)
+
+        for variable in all_variables:
+            if -variable not in all_variables:
+                values[variable] = 1
+                values[-variable] = -1
+                change = True
+
+        formula = _simplify_formula(formula, values)
+        if formula is None:
+            return None
+
+    return formula
+
+
 def _solve(
     formula: List[List[int]], values: Dict[int, int]
 ) -> Union[Dict[int, int], str]:
@@ -89,7 +142,7 @@ def _solve(
     """
     global _recurrence_counter
     _recurrence_counter += 1
-    formula = _simplify_formula(formula, values)
+    formula = _unit_propagation_with_fixed_sign(formula, values)
     if formula == []:
         # empty formulas are satisfied
         return values
@@ -97,30 +150,57 @@ def _solve(
         # None formulas are unsatisfiable
         return "UNSAT"
 
-    # take first variable each time, since here we choose any variable
-    variable = formula[0][0]
+    # evaluate formulas from the shortest to the longest
+    formula.sort(key=len)
 
-    # set variable to True (and its negation to False)
-    values_copy = values.copy()
-    values_copy[variable] = 1
-    values_copy[-variable] = -1
-    values_copy = _solve(formula, values_copy)
-    if values_copy != "UNSAT":
-        return values_copy
+    # check variables from the most common (is in the most clauses) to the least common
+    first_clause_variable_counts = {v: 1 for v in formula[0]}
+    for clause in formula[1:]:
+        for v in clause:
+            if v in first_clause_variable_counts:
+                first_clause_variable_counts[v] += 1
 
-    # set variable to False (and its negation to True)
+    # we have tuples (v, count); sort them descending by count and select variables only
+    first_clause_variables = [
+        v
+        for v, count in sorted(
+            first_clause_variable_counts.items(),
+            key=operator.itemgetter(1),
+            reverse=True,
+        )
+    ]
+
+    # try to satisfy the first, shortest formula
+    for variable in first_clause_variables:
+        values[variable] = 1
+        values[-variable] = -1
+        values_copy = values.copy()
+        result = _solve(formula, values_copy)
+        if result != "UNSAT":
+            return result
+
+        # if the previous value didn't work, the negative must (or the formula
+        # is unsatisfiable)
+        values[variable] = -1
+        values[-variable] = 1
+
+    # if all values didn't work, we try to take negatives and go forward
     values_copy = values.copy()
-    values_copy[variable] = -1
-    values_copy[-variable] = 1
     return _solve(formula, values_copy)
 
 
-def basic_dpll_solve(
-    formula: List[List[int]],
-) -> Tuple[Union[Dict[int, int], str], int]:
+def full_dpll_solve(formula: List[List[int]]) -> Tuple[Union[Dict[int, int], str], int]:
     """
-    Basic DPLL (Davis, Putnam, Logemann, Loveland) solver implementation for
-    checking SAT formulas satisfiability.
+    Full DPLL (Davis, Putnam, Logemann, Loveland) solver implementation for
+    checking SAT formulas satisfiability, upgraded with:
+    - better values generation
+    - smarter evaluation order
+    - unit propagation
+    - fixed sign variable elimination
+    -
+
+    Variables with the same sign in the entire formula can be evaluated immediately
+    as a part of simplification.
 
     :param formula: list of clauses in CNF form
     :returns: tuple of:

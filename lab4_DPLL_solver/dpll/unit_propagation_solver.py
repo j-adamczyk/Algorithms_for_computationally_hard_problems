@@ -66,6 +66,43 @@ def _simplify_formula(
     return simplified_formula
 
 
+def _unit_propagation(
+    formula: List[List[int]], values: Dict[int, int]
+) -> Optional[List[List[int]]]:
+    """
+    Simplifies a SAT formula with unit propagation.
+
+    If there is a clause with a single variable, it has to be True. Setting
+    this may change the rest of formula, so we continue as long as there are
+    any changes. In this process we may reduce the formula to the empty one
+    (satisfied) or detect unsatisfiability.
+
+    For formulas we assume that:
+    - None formula is not satisfied
+    - [] formula is satisfied (since it's an empty conjunction, similar to
+      product of ones being one)
+
+    :param formula: list of clauses in CNF form
+    :param values: values of variables
+    :return: simplified formula
+    """
+    change = True
+    while change:
+        change = False
+        for clause in formula:
+            if len(clause) == 1 and clause[0] not in values:
+                variable = clause[0]
+                values[variable] = 1
+                values[-variable] = -1
+                change = True
+
+        formula = _simplify_formula(formula, values)
+        if formula is None:
+            return None
+
+    return formula
+
+
 def _solve(
     formula: List[List[int]], values: Dict[int, int]
 ) -> Union[Dict[int, int], str]:
@@ -89,7 +126,7 @@ def _solve(
     """
     global _recurrence_counter
     _recurrence_counter += 1
-    formula = _simplify_formula(formula, values)
+    formula = _unit_propagation(formula, values)
     if formula == []:
         # empty formulas are satisfied
         return values
@@ -97,30 +134,41 @@ def _solve(
         # None formulas are unsatisfiable
         return "UNSAT"
 
-    # take first variable each time, since here we choose any variable
-    variable = formula[0][0]
+    # evaluate formulas from the shortest to the longest
+    formula.sort(key=len)
 
-    # set variable to True (and its negation to False)
-    values_copy = values.copy()
-    values_copy[variable] = 1
-    values_copy[-variable] = -1
-    values_copy = _solve(formula, values_copy)
-    if values_copy != "UNSAT":
-        return values_copy
+    # try to satisfy the first, shortest formula
+    for variable in formula[0]:
+        values[variable] = 1
+        values[-variable] = -1
+        values_copy = values.copy()
+        result = _solve(formula, values_copy)
+        if result != "UNSAT":
+            return result
 
-    # set variable to False (and its negation to True)
+        # if the previous value didn't work, the negative must (or the formula
+        # is unsatisfiable)
+        values[variable] = -1
+        values[-variable] = 1
+
+    # if all values didn't work, we try to take negatives and go forward
     values_copy = values.copy()
-    values_copy[variable] = -1
-    values_copy[-variable] = 1
     return _solve(formula, values_copy)
 
 
-def basic_dpll_solve(
+def unit_propagation_dpll_solve(
     formula: List[List[int]],
 ) -> Tuple[Union[Dict[int, int], str], int]:
     """
-    Basic DPLL (Davis, Putnam, Logemann, Loveland) solver implementation for
-    checking SAT formulas satisfiability.
+    DPLL (Davis, Putnam, Logemann, Loveland) solver implementation for
+    checking SAT formulas satisfiability, upgraded with unit propagation.
+
+    Unit propagation relies on the observation that single variable clauses
+    require that variable to be set to True. This can often lead to satisfying
+    other clauses or proving fast that the formula is unsatisfiable. It is
+    basically a better version of cause/formula simplification.
+
+    It also uses upgrades from "better backtracking" version.
 
     :param formula: list of clauses in CNF form
     :returns: tuple of:

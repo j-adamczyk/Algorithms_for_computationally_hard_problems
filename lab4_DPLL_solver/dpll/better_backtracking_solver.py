@@ -97,30 +97,45 @@ def _solve(
         # None formulas are unsatisfiable
         return "UNSAT"
 
-    # take first variable each time, since here we choose any variable
-    variable = formula[0][0]
+    # evaluate formulas from the shortest to the longest
+    formula.sort(key=len)
 
-    # set variable to True (and its negation to False)
-    values_copy = values.copy()
-    values_copy[variable] = 1
-    values_copy[-variable] = -1
-    values_copy = _solve(formula, values_copy)
-    if values_copy != "UNSAT":
-        return values_copy
+    # try to satisfy the first, shortest formula
+    for variable in formula[0]:
+        values[variable] = 1
+        values[-variable] = -1
+        values_copy = values.copy()
+        result = _solve(formula, values_copy)
+        if result != "UNSAT":
+            return result
 
-    # set variable to False (and its negation to True)
+        # if the previous value didn't work, the negative must (or the formula
+        # is unsatisfiable)
+        values[variable] = -1
+        values[-variable] = 1
+
+    # if all values didn't work, we try to take negatives and go forward
     values_copy = values.copy()
-    values_copy[variable] = -1
-    values_copy[-variable] = 1
     return _solve(formula, values_copy)
 
 
-def basic_dpll_solve(
+def better_backtracking_dpll_solve(
     formula: List[List[int]],
 ) -> Tuple[Union[Dict[int, int], str], int]:
     """
-    Basic DPLL (Davis, Putnam, Logemann, Loveland) solver implementation for
-    checking SAT formulas satisfiability.
+    DPLL (Davis, Putnam, Logemann, Loveland) solver implementation for
+    checking SAT formulas satisfiability, upgraded with better values generation
+    and smarter evaluation order.
+
+    Instead of naive checking x=1 and then x=0, we check:
+    - x=1
+    - x=0, y=1,
+    - x=0, y=0, z=1,
+    - ...
+    - x=0, y=0, z=0, …, a=1
+
+    Additionally, we check the formulas from the shortest to the longest. This
+    way we potentially eliminate the unsatisfiable values fast.
 
     :param formula: list of clauses in CNF form
     :returns: tuple of:
