@@ -15,7 +15,7 @@ class SortNet:
         self.current = start
 
         # current variables for the input lines
-        self.lines = lines
+        self.lines = lines.copy()
 
         # if True, generate equivalences in addition to implications in comparators
         self.generate_equivalences = generate_equivalences
