@@ -1,6 +1,7 @@
 import os
 
-from sat import solve_x3c
+from lab5_threshold_functions.sat.types import EdgeList, VertexSets
+from sat import solve_vertex_cover_sortnet, solve_vertex_cover_threshold
 from utils.dimacs import *
 
 # commented out the hardest graphs, since they take LONG time to calculate
@@ -68,15 +69,24 @@ x3c_names = [
 if __name__ == "__main__":
     # calc_sat_probs_and_plot()
 
-    # X3C -> SAT
-    x3c_dir = "x3c"
-    for name in x3c_names:
-        x3c_filename = os.path.join(x3c_dir, name)
-        n, sets = loadX3C(x3c_filename)
+    # Vertex Cover -> SAT
+    graph_dir = "graphs"
+    solution_dir = "graphs_solutions"
+    for name in graph_names:
+        graph_filename = os.path.join(graph_dir, name)
+        solution_filename = os.path.join(solution_dir, f"{name}.sol")
 
-        satisfiable = True if name.split(".")[1] == "yes" else False
+        G: VertexSets = loadGraph(graph_filename)
+        G_edge_list: EdgeList = edgeList(G)
 
         print(name)
-        result = solve_x3c(n, sets)
-        print(f"result: {result}, truth: {satisfiable}")
-        print()
+        for k in range(1, len(G)):
+            solution = solve_vertex_cover_sortnet(G, k)
+            if not solution or not isVC(G_edge_list, solution):
+                continue
+
+            print("solution k:", k)
+            print("VC:", isVC(G_edge_list, solution), "\n")
+            print()
+            saveSolution(solution_filename, solution)
+            break

@@ -1,10 +1,9 @@
-from typing import List, Optional, Union
+from typing import List, Optional
 
 import pycosat
 
-from approx_vertex_cover.types import VertexSets
-from utils.dimacs import edgeList
-
+from lab5_threshold_functions.sat.types import VertexSets
+from lab5_threshold_functions.utils.dimacs import edgeList
 
 n = 0
 
@@ -37,10 +36,10 @@ def add_implications_for_pairs(formula):
             formula.extend([[-y(i - 1, j), y(i, j)], [-y(i - 1, j - 1), -i, y(i, j)]])
 
 
-def solve_vertex_cover(graph: VertexSets, k: int) -> Optional[List[int]]:
+def solve_vertex_cover_threshold(graph: VertexSets, k: int) -> Optional[List[int]]:
     """
-    Solve vertex cover problem through reduction to a SAT problem and using a
-    SAT solver.
+    Solve vertex cover problem through reduction to a SAT problem with threshold
+    functions and using a SAT solver.
 
     Denote:
     - V = {v_1, v_2, ..., v_n} (n = |V|)
