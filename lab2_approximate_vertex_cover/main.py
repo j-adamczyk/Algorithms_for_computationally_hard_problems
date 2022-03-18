@@ -1,6 +1,6 @@
 import os
 
-from approx_vertex_cover import better_approximation, simple_approximation
+from approx_vertex_cover import two_approx, logn_approx
 from approx_vertex_cover.types import EdgeList, VertexSets
 from utils.dimacs import *
 
@@ -58,13 +58,11 @@ if __name__ == "__main__":
         G_edge_list: EdgeList = edgeList(G)
 
         print(name)
-        for k in range(1, len(G)):
-            solution = better_approximation(G_edge_list, k)
-            if not solution or not isVC(G_edge_list, solution):
-                continue
+        solution = logn_approx(G_edge_list)
+        if not solution or not isVC(G_edge_list, solution):
+            continue
 
-            print("solution k:", k)
-            print("VC:", isVC(G_edge_list, solution))
-            print()
-            saveSolution(solution_filename, solution)
-            break
+        print("solution k:", len(solution))
+        print("VC:", isVC(G_edge_list, solution))
+        print()
+        saveSolution(solution_filename, solution)

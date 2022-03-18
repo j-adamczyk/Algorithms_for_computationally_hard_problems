@@ -55,11 +55,11 @@ if __name__ == "__main__":
             else:
                 continue
 
-            solution = better_recursion(graph, k, solution)
+            solution = optimized_recursion(graph, k, solution)
             if not solution:
                 continue
 
-            print("solution k:", k)
+            print("solution k:", len(solution))
             print("VC:", isVC(G_edge_list, solution))
             print()
             saveSolution(solution_filename, solution)

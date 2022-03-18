@@ -1,6 +1,7 @@
 from typing import Dict, Set
 
 from approx_vertex_cover.types import EdgeList
+from utils.dimacs import isVC
 
 
 def _get_vertices_degrees(G: EdgeList) -> Dict[int, int]:
@@ -23,17 +24,13 @@ def _get_highest_degree_vertex(G: EdgeList) -> int:
     return best_vertex
 
 
-def _remove_neighbors_of_vertex(G: EdgeList, u: int) -> EdgeList:
-    G = [edge for edge in G if edge[0] != u and edge[1] != u]
-    return G
-
-
-def simple_approximation(graph: EdgeList, k: int) -> Set[int]:
+def logn_approx(graph: EdgeList) -> Set[int]:
     """
-    Simple approximation algorithm for the Vertex Cover problem. It follows
+    Approximation algorithm for the Vertex Cover problem, which follows
     the intuitive approach that we can add the highest degree vertex to the
-    solution, until we get k vertices. Each time we remove the edges of the
+    solution, until we get the solution. Each time we remove the edges of the
     selected vertex.
+
     Approximation factor: log(n) (for graph with n vertices)
 
     :param graph: graphs represented as a list of sets (incident vertices)
@@ -42,10 +39,11 @@ def simple_approximation(graph: EdgeList, k: int) -> Set[int]:
     vertex cover for given k
     """
     solution = set()
+    original_graph = graph.copy()
 
-    while len(solution) < k and graph:
+    while not isVC(original_graph, solution):
         u = _get_highest_degree_vertex(graph)
-        graph = _remove_neighbors_of_vertex(graph, u)
+        graph = [edge for edge in graph if u not in edge]
         solution.add(u)
 
     return solution

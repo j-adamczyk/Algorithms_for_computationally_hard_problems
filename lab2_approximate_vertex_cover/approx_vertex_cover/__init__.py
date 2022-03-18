@@ -1,2 +1,2 @@
-from .better_approx import better_approximation
-from .simple_approx import simple_approximation
+from .two_approx import two_approx
+from .logn_approx import logn_approx
