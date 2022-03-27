@@ -3,52 +3,7 @@ import os
 from sat import solve_x3c
 from utils.dimacs import *
 
-# commented out the hardest graphs, since they take LONG time to calculate
-graph_names = [
-    "e5",
-    "e10",
-    "e20",
-    "e40",
-    # "e150",
-    "s25",
-    "s50",
-    "s500",
-    "b20",
-    # "b30",
-    # "b100",
-    # "k330_a",
-    # "k330_b",
-    # "k330_c",
-    # "k330_d",
-    # "k330_e",
-    # "k330_f",
-    # "f30",
-    # "f35",
-    # "f40",
-    # "f56",
-    "m20",
-    "m30",
-    "m40",
-    "m50",
-    # "m100",
-    "p20",
-    "p35",
-    "p60",
-    # "p150",
-    # "p200",
-    "r30_01",
-    "r30_05",
-    "r50_001",
-    "r50_01",
-    # "r50_05",
-    # "r100_005",
-    # "r100_01",
-    # "r200_001",
-    # "r200_005"
-]
-
-
-x3c_names = [
+x3c_graphs_names = [
     "10.no.x3c",
     "10.yes.x3c",
     "50.no.x3c",
@@ -70,7 +25,7 @@ if __name__ == "__main__":
 
     # X3C -> SAT
     x3c_dir = "x3c"
-    for name in x3c_names:
+    for name in x3c_graphs_names:
         x3c_filename = os.path.join(x3c_dir, name)
         n, sets = loadX3C(x3c_filename)
 
