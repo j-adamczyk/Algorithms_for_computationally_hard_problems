@@ -67,7 +67,6 @@ x3c_names = [
 
 
 if __name__ == "__main__":
-    # Vertex Cover -> SAT
     graph_dir = "graphs"
     solution_dir = "graphs_solutions"
     for name in graph_names:
