@@ -2,10 +2,15 @@ import math
 from itertools import combinations
 from typing import Iterable
 
-from lab7_tree_decomposition_vertex_cover_size.vertex_cover.types import VertexSets, TreeDecomposition
+from lab7_tree_decomposition_vertex_cover_size.vertex_cover.types import (
+    VertexSets,
+    TreeDecomposition,
+)
 
 
-def check_subgraph_VC(graph: VertexSets, vertices_subset: Iterable[int], candidate_vertices: Iterable[int]):
+def check_subgraph_VC(
+    graph: VertexSets, vertices_subset: Iterable[int], candidate_vertices: Iterable[int]
+):
     """
     Answers the question: if for given graph we check the subgraph given by the
     vertices subset, does the set of candidate vertices create a Vertex Cover
@@ -97,5 +102,3 @@ def vertex_cover_size(graph: VertexSets, tree_decomp: TreeDecomposition) -> int:
                 best_k = k
 
     return best_k
-
-

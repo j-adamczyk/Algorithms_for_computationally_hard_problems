@@ -22,11 +22,7 @@ def two_approx(graph: EdgeList) -> Set[int]:
 
     while not isVC(original_graph, solution):
         u, v = graph.pop()
-        graph = [
-            edge
-            for edge in graph
-            if u not in edge and v not in edge
-        ]
+        graph = [edge for edge in graph if u not in edge and v not in edge]
         solution |= {u, v}
 
     return solution

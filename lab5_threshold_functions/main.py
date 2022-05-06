@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
         print(name)
         for k in range(1, len(G)):
-            solution = solve_vertex_cover_sortnet(G, k)
+            solution = solve_vertex_cover_threshold(G, k)
             if not solution or not isVC(G_edge_list, solution):
                 continue
 

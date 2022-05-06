@@ -66,9 +66,9 @@ def solve_vertex_cover_threshold(graph: VertexSets, k: int) -> Optional[List[int
     global n
     formula = []
 
-    n = len(graph) - 1  # -1 to account for nonexistent vertex 0
+    n = len(graph)
 
-    vertices = [[v, -v] for v in range(1, len(graph))]
+    vertices = [[v, -v] for v in range(1, n)]
     formula.extend(vertices)
 
     cover_edges(formula, graph)
